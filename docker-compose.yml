@@ -1,8 +1,7 @@
 version: '3'
 services:
   hello_screenshot:
-    #image: loseprivacy_signin_loseprivacy:latest
-    build: .
+    image: ghcr.io/luler/hello_screenshot:latest
     privileged: true
     volumes:
       - .:/app
