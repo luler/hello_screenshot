@@ -7,4 +7,4 @@ services:
     volumes:
       - .:/app
     ports:
-      - 24140:24140
+      - 14140:14140
