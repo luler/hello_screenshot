@@ -28,12 +28,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUBTOKEN }}
 
+      - name: Get the current date
+        id: date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ env.DATE }}
 
       - name: Logout from GitHub Container Registry
         run: docker logout ghcr.io
