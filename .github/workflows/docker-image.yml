@@ -38,7 +38,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ env.DATE }}
+#            ghcr.io/${{ github.repository }}:${{ env.DATE }}
             ghcr.io/${{ github.repository }}:latest
 
       - name: Logout from GitHub Container Registry
