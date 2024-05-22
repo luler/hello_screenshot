@@ -8,5 +8,6 @@ RUN apt-get install -y libglib2.0-0 libnss3 libnspr4 libatk1.0-0 libcups2 libdbu
 RUN pip install -r requirements.txt
 # Playwright install browser dependencies and the browser itself.
 RUN playwright install chromium
+LABEL org.opencontainers.image.source https://github.com/luler/hello_screenshot
 # Set the entry point to the script
 ENTRYPOINT ["python","-u", "main.py"]
