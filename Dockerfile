@@ -1,8 +1,4 @@
 FROM python:3.11-slim
-# add label for relate github repository
-LABEL org.opencontainers.image.source=https://github.com/luler/hello_screenshot
-#LABEL org.opencontainers.image.description="功能优化"
-#LABEL org.opencontainers.image.licenses=MIT
 # Set working directory within the container
 WORKDIR /app
 # Copy the script into the container
