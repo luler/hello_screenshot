@@ -1,0 +1,2 @@
+playwright~=1.35.0
+Flask[async]~=3.0.3

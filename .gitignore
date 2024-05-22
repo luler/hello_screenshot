@@ -1,0 +1,10 @@
+/.idea
+/.vscode
+*.log
+.DS_Store
+test.db
+.idea
+!.gitignore
+**/__pycache__
+download_dir
+*.png

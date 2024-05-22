@@ -1,0 +1,10 @@
+version: '3'
+services:
+  hello_screenshot:
+    #image: loseprivacy_signin_loseprivacy:latest
+    build: .
+    privileged: true
+    volumes:
+      - .:/app
+    ports:
+      - 24140:24140
