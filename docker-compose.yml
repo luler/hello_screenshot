@@ -3,6 +3,7 @@ services:
   hello_screenshot:
     image: ghcr.io/luler/hello_screenshot:latest
     privileged: true
+    restart: always
     volumes:
       - .:/app
     ports:
