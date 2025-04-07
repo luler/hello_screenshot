@@ -43,6 +43,10 @@ docker-compose up -d
 | full_page       | 否    | int    | 截图类型，0-窗口页面，1-整个网页           |
 | wait_second     | 否    | int    | 等待加载时间，单位秒（有些页面异步加载数据可能需要等待） |
 
+# 演示地址
+
+https://cas.luler.top/?search=664f16483a8d2
+
 # 参考图片
 
 > 示例页面
