@@ -1,7 +1,7 @@
 from playwright.async_api import async_playwright
 
 
-async def take_screenshot(url, viewport_width, viewport_height, full_page, wait_second):
+async def take_screenshot(url, viewport_width, viewport_height, full_page, wait_second, element_selector=None):
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True, args=[
             # 需要设置代理类型，否则默认的代理类型会被反爬禁止访问
@@ -14,10 +14,24 @@ async def take_screenshot(url, viewport_width, viewport_height, full_page, wait_
             viewport={"width": viewport_width, "height": viewport_height},
         )
         page = await context.new_page()
-        await page.goto(url)
+
+        # 检测是否为HTML代码
+        if url.strip().startswith(('<html', '<!DOCTYPE html')):
+            await page.set_content(url)
+        else:
+            await page.goto(url)
+
         if wait_second > 0:
             # 有些页面需要异步加载数据，这里可以设置等待几秒后再截图
             await page.wait_for_timeout(wait_second * 1000)
-        ss = await page.screenshot(full_page=full_page)
+
+        if element_selector:
+            # 截图指定元素
+            element = page.locator(element_selector)
+            ss = await element.screenshot()
+        else:
+            # 截图整个页面
+            ss = await page.screenshot(full_page=full_page)
+
         await browser.close()
         return ss

@@ -17,25 +17,26 @@ def static_file(path):
     return send_from_directory(app.static_folder, path)
 
 
-@app.route('/screenshot', methods=['GET'])
+@app.route('/screenshot', methods=['GET', 'POST'])
 async def screenshot():
-    url = request.args.get('url')
-    viewport_width = request.args.get('viewport_width', default=1280, type=int)
-    viewport_height = request.args.get('viewport_height', default=720, type=int)
-    wait_second = request.args.get('wait_second', default=0, type=int)
-    full_page = request.args.get('full_page', default=0, type=int)
-    full_page = bool(full_page)
+    data = request.get_json() if request.is_json else (request.form if request.method == 'POST' else request.args)
+    params = {
+        'url': data.get('url'),
+        'viewport_width': int(data.get('viewport_width', 1280)),
+        'viewport_height': int(data.get('viewport_height', 720)),
+        'wait_second': int(data.get('wait_second', 0)),
+        'element_selector': data.get('element_selector'),
+        'full_page': bool(int(data.get('full_page', 0)))
+    }
 
-    if not url:
+    if not params['url']:
         return '网页链接不能为空', 400
 
     try:
-        # 截取屏幕并保存
-        data = await take_screenshot(url, viewport_width, viewport_height, full_page, wait_second)
-        return Response(data, mimetype='image/png')
-
+        screenshot_data = await take_screenshot(**params)
+        return Response(screenshot_data, mimetype='image/png')
     except Exception as e:
-        return '发生错误，信息：' + str(e), 500
+        return f'发生错误，信息：{str(e)}', 500
 
 
 if __name__ == '__main__':
