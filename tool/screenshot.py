@@ -1,12 +1,20 @@
+import os
+
 from playwright.async_api import async_playwright
 
 
-async def take_screenshot(url, viewport_width, viewport_height, full_page, wait_second, element_selector=None):
+async def take_screenshot(url, viewport_width, viewport_height, full_page, wait_second, element_selector=None,
+                          use_proxy=False):
+    args = [
+        # 需要设置代理类型，否则默认的代理类型会被反爬禁止访问
+        '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
+    ]
+    # 从环境变量获取代理（支持 http_proxy 或 https_proxy）
+    proxy_url = os.getenv("http_proxy") or os.getenv("https_proxy")
+    if proxy_url and use_proxy:
+        args.append(f"--proxy-server={proxy_url}")
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True, args=[
-            # 需要设置代理类型，否则默认的代理类型会被反爬禁止访问
-            '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
-        ])
+        browser = await p.chromium.launch(headless=True, args=args)
         context = await browser.new_context(
             # 设置浏览器语言为简体中文
             locale='zh-CN',

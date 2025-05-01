@@ -26,7 +26,8 @@ async def screenshot():
         'viewport_height': int(data.get('viewport_height', 720)),
         'wait_second': int(data.get('wait_second', 0)),
         'element_selector': data.get('element_selector'),
-        'full_page': bool(int(data.get('full_page', 0)))
+        'full_page': bool(int(data.get('full_page', 0))),
+        'use_proxy': bool(int(data.get('use_proxy', 0)))
     }
 
     if not params['url']:
