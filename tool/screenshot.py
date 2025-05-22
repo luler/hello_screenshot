@@ -9,10 +9,10 @@ async def take_screenshot(url, viewport_width, viewport_height, full_page, wait_
         # 需要设置代理类型，否则默认的代理类型会被反爬禁止访问
         '--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36'
     ]
-    # 从环境变量获取代理（支持 http_proxy 或 https_proxy）
-    proxy_url = os.getenv("http_proxy") or os.getenv("https_proxy")
-    if proxy_url and use_proxy:
-        args.append(f"--proxy-server={proxy_url}")
+    # 从环境变量获取代理（支持环境变量proxy_server）
+    proxy_server = os.getenv("proxy_server")
+    if proxy_server and use_proxy:
+        args.append(f"--proxy-server={proxy_server}")
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True, args=args)
         context = await browser.new_context(
