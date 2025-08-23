@@ -1,4 +1,3 @@
-version: '3'
 services:
   hello_screenshot:
     image: ghcr.io/luler/hello_screenshot:latest
@@ -8,3 +7,6 @@ services:
       - .:/app
     ports:
       - 14140:14140
+    environment:
+      - MAX_CONCURRENT_SCREENSHOTS=3
+#      - PROXY_SERVER=socks5://172.17.0.1:2080

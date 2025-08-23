@@ -1,3 +1,6 @@
+import os
+from asyncio import Semaphore
+
 from flask import Flask, request, Response, send_from_directory
 
 from tool.screenshot import take_screenshot
@@ -10,6 +13,11 @@ app.static_folder = 'web/dist'
 async def index():
     # 返回 dist/index.html 文件
     return send_from_directory(app.static_folder, 'index.html')
+
+
+# 限制同时运行的截图任务数量
+max_concurrent_screenshots = int(os.getenv('MAX_CONCURRENT_SCREENSHOTS', 3))
+screenshot_semaphore = Semaphore(max_concurrent_screenshots)  # 最多N个并发截图任务
 
 
 @app.route('/<path:path>')
@@ -33,11 +41,12 @@ async def screenshot():
     if not params['url']:
         return '网页链接不能为空', 400
 
-    try:
-        screenshot_data = await take_screenshot(**params)
-        return Response(screenshot_data, mimetype='image/png')
-    except Exception as e:
-        return f'发生错误，信息：{str(e)}', 500
+    async with screenshot_semaphore:  # 控制并发数量
+        try:
+            screenshot_data = await take_screenshot(**params)
+            return Response(screenshot_data, mimetype='image/png')
+        except Exception as e:
+            return f'发生错误，信息：{str(e)}', 500
 
 
 if __name__ == '__main__':
