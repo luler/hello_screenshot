@@ -43,7 +43,7 @@ async def take_screenshot(url, viewport_width, viewport_height, full_page, wait_
                 # 截图整个页面
                 ss = await page.screenshot(full_page=full_page)
             return ss
-    except Exception as e:
+    except BaseException as e:
         raise Exception(f"截图失败: {str(e)}")
     finally:
         if browser:

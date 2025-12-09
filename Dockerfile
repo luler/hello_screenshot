@@ -9,4 +9,4 @@ RUN pip install -r requirements.txt
 # Playwright install browser dependencies and the browser itself.
 RUN playwright install chromium
 # Set the entry point to the script
-ENTRYPOINT ["python","-u", "main.py"]
+ENTRYPOINT ["gunicorn", "-w", "4", "-k", "gevent", "-b", "0.0.0.0:14140", "--timeout", "120", "--max-requests", "500", "main:app"]
